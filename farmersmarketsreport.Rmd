@@ -1,0 +1,308 @@
+---
+title: "US Farmers' Markets Report"
+author: "Daniel Pontoh"
+date: "June 5, 2016"
+output: html_document
+code_folding: hide
+runtime: shiny
+---
+*Data visuals in this reported were all made using data obtained from the [here](https://apps.ams.usda.gov/FarmersMarketsExport/ExcelExport.aspx) from the USDA.
+
+```{r presetup, comment=FALSE, warning=FALSE, results='hide', message=FALSE}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+library(readxl)
+library(reshape2)
+library(stringi)
+
+usfarmersmarkets <- read_csv("https://apps.ams.usda.gov/FarmersMarketsExport/ExcelExport.aspx")
+
+uspopulation <- read_csv("https://www.census.gov/popest/data/national/totals/2015/files/NST-EST2015-alldata.csv")
+
+#usfarmersmarkets <- read_csv("data/Export.csv")
+
+#uspopulation <- read_csv("data/uspopulationdata.csv")
+```
+
+
+
+
+
+```{r datatransformation}
+
+uspopulation <- select(uspopulation, NAME, CENSUS2010POP)
+
+uspopulation$CENSUS2010POP <- as.numeric(uspopulation$CENSUS2010POP)
+
+uspopulation <- uspopulation[6:57,]
+
+virginislands <- c("Virgin Islands", as.numeric(106405))
+
+uspopulation <- rbind(uspopulation, virginislands)
+
+colnames(uspopulation) <- c("Var1", "Pop")
+
+totusfm <- data.frame(table(usfarmersmarkets$State))
+
+totusfm <- merge(uspopulation, totusfm, by = "Var1")
+
+
+totusfm$lab <- as.character(totusfm$Freq)
+
+
+totusfm$Pop <- as.numeric(totusfm$Pop)
+
+totusfm$Freq <- as.numeric(totusfm$Freq)
+
+
+
+
+totusfm$Pcp <- as.numeric(totusfm$Freq / totusfm$Pop) * 100000
+
+totusfm$Pcp <- round(totusfm$Pcp, digits=1)
+totusfm$pcplab <- as.character(totusfm$Pcp)
+```
+
+
+```{r plots}
+gg <- ggplot(totusfm, aes(x=Var1, y=Freq, width = 0.75), color = "white")
+gg <- gg + geom_bar(stat = "identity", fill="#fc8d62", color="#8da0cb")
+gg <- gg + geom_text(aes(label = lab, hjust = -.25), size = 2.35)
+gg <- gg + labs(x = "State/Territory",title= "Number of Farmers' Markets in Each State")
+gg <- gg + theme(panel.grid.major.y = element_blank())
+gg <- gg + theme(panel.grid.minor.x = element_blank())
+gg <- gg + theme(panel.grid.minor.y = element_blank())
+gg <- gg + theme(panel.border = element_blank())
+gg <- gg + theme(panel.background = element_blank())
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+gg <- gg + theme(axis.title.x = element_blank())
+gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=15))
+gg <- gg + theme(axis.text.y  = element_text(size=8))
+gg <- gg + theme(axis.text.x = element_blank())
+gg <- gg + scale_y_continuous(expand = c(0,28.5))
+gg <- gg + coord_flip()
+gg
+
+gg <- ggplot(totusfm, aes(x=Var1, y=Freq, width = 0.75), color = "white")
+gg <- gg + geom_bar(stat = "identity", fill="#fc8d62", color="#8da0cb")
+gg <- gg + geom_text(aes(label = lab, hjust = -.25), size = 2.35)
+gg <- gg + labs(x = "State/Territory",title= "Number of Farmers' Markets in Each State")
+gg <- gg + theme(panel.grid.major.y = element_blank())
+gg <- gg + theme(panel.grid.minor.x = element_blank())
+gg <- gg + theme(panel.grid.minor.y = element_blank())
+gg <- gg + theme(panel.border = element_blank())
+gg <- gg + theme(panel.background = element_blank())
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+gg <- gg + theme(axis.title.x = element_blank())
+gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=15))
+gg <- gg + theme(axis.text.y  = element_text(size=8))
+gg <- gg + theme(axis.text.x = element_blank())
+gg <- gg + scale_y_continuous(expand = c(0,28.5))
+gg <- gg + scale_x_discrete(limits= totusfm$Var1[order(totusfm$Freq)])
+gg <- gg + coord_flip()
+gg
+
+
+
+
+gg <- ggplot(totusfm, aes(x=Var1, y=Pcp, width = .75))
+gg <- gg + geom_bar(stat = "identity", fill="#fc8d62", color="#8da0cb")
+gg <- gg + geom_text(aes(label = pcplab, hjust = -.25), size = 2.35)
+gg <- gg + labs(x = "State/Territory", title = "Number of Farmers' Markets per Capita")
+gg <- gg + scale_y_continuous(expand = c(0,.85))
+gg <- gg + theme(panel.grid.major.y = element_blank())
+gg <- gg + theme(panel.grid.minor.x = element_blank())
+gg <- gg + theme(panel.grid.minor.y = element_blank())
+gg <- gg + theme(panel.border = element_blank())
+gg <- gg + theme(panel.background = element_blank())
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+gg <- gg + theme(axis.title.x = element_blank())
+gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=15))
+gg <- gg + theme(axis.text.y  = element_text(size=8))
+gg <- gg + theme(axis.text.x = element_blank())
+gg <- gg + coord_flip()
+gg
+
+
+
+gg <- ggplot(totusfm, aes(x=Var1, y=Pcp, width = .75))
+gg <- gg + geom_bar(stat = "identity", fill="#fc8d62", color="#8da0cb")
+gg <- gg + scale_x_discrete(limits= totusfm$Var1[order(totusfm$Pcp)], expand = c(0,0))
+gg <- gg + geom_text(aes(label = pcplab, hjust = -.25), size = 2.35)
+gg <- gg + labs(x = "State/Territory", title = "Number of Farmers' Markets per Capita")
+gg <- gg + scale_y_continuous(expand = c(0,.85))
+gg <- gg + theme(panel.grid.major.y = element_blank())
+gg <- gg + theme(panel.grid.minor.x = element_blank())
+gg <- gg + theme(panel.grid.minor.y = element_blank())
+gg <- gg + theme(panel.border = element_blank())
+gg <- gg + theme(panel.background = element_blank())
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+gg <- gg + theme(axis.title.x = element_blank())
+gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=15))
+gg <- gg + theme(axis.text.y  = element_text(size=8))
+gg <- gg + theme(axis.text.x = element_blank())
+gg <- gg + coord_flip()
+gg
+
+summary(totusfm$Pcp)
+```
+
+```{r moredatatransformation}
+usfm <- usfarmersmarkets[c(2, 9:11,21, 22,  24:58)]
+
+usfm %>% 
+  gather(var, value, Credit:WildHarvested) %>% 
+  group_by(State, var) %>% 
+  summarise(prop_Y = sum(value == "Y") / n()) %>% 
+  spread(var, prop_Y) -> allstatespct
+
+allstatespct$Average <- rowMeans(allstatespct[,-1])
+allstatespct <- select(allstatespct, -Credit, -Organic, -SFMNP, - SNAP, -WIC, -WICcash)
+allstatespct <- allstatespct[order(allstatespct$Average),]
+```
+
+```{r moregraphs, warning=FALSE}
+gg <- ggplot(allstatespct, aes(x=State, y=Average, width = .75))
+gg <- gg + geom_bar(stat = "identity", fill="#fc8d62", color="#8da0cb")
+gg <- gg + labs(x = "State/Territory", title = "Average Farmers' Market Diversity")
+gg <- gg + geom_text(aes(label = as.character(as.integer(allstatespct$Average*100)), hjust = -.25), size = 2.25)
+gg <- gg + theme(panel.grid.major.y = element_blank())
+gg <- gg + theme(panel.grid.minor.x = element_blank())
+gg <- gg + theme(panel.grid.minor.y = element_blank())
+gg <- gg + theme(panel.border = element_blank())
+gg <- gg + theme(panel.background = element_blank())
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+gg <- gg + theme(axis.title.x = element_blank())
+gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=15))
+gg <- gg + theme(axis.text.y  = element_text(size=8))
+gg <- gg + theme(axis.text.x = element_blank())
+gg <- gg + coord_flip()
+gg
+
+
+gg <- ggplot(allstatespct, aes(x=State, y=Average, width = .75))
+gg <- gg + geom_bar(stat = "identity", fill="#fc8d62", color="#8da0cb")
+gg <- gg + labs(x = "State/Territory", title = "Average Farmers' Market Diversity")
+gg <- gg + geom_text(aes(label = as.character(as.integer(allstatespct$Average*100)), hjust = -.25), size = 2.25)
+gg <- gg + scale_x_discrete(limits= allstatespct$State[order(allstatespct$Average)], expand = c(0,0))
+gg <- gg + theme(panel.grid.major.y = element_blank())
+gg <- gg + theme(panel.grid.minor.x = element_blank())
+gg <- gg + theme(panel.grid.minor.y = element_blank())
+gg <- gg + theme(panel.border = element_blank())
+gg <- gg + theme(panel.background = element_blank())
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+gg <- gg + theme(axis.title.x = element_blank())
+gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=15))
+gg <- gg + theme(axis.text.y  = element_text(size=8))
+gg <- gg + theme(axis.text.x = element_blank())
+gg <- gg + coord_flip()
+gg
+
+summary(allstatespct$Average)
+```
+
+```{r statediversityfunc}
+statenames <- paste(levels(factor(usfarmersmarkets$State)))
+selectInput("data", "", c(statenames))
+```
+
+
+
+```{r statediversitygraph}
+
+renderPlot({
+  d <- allstatespct[allstatespct$State == input$data,]
+  d <- d[2,]
+  d <- melt(d, id.vars="State")
+  d <- d[2:3]
+  d <- d[-30,]
+  gg <- ggplot(d, aes(variable,value, fill = variable, width = .75))
+  gg <- gg + geom_bar(stat = "identity", color="white")
+  gg <- gg + labs(x = "Category", title = paste(input$data, "Farmers' Market Diversity"))
+  gg <- gg + geom_text(aes(label = paste(as.character(as.integer(d$value*100)), "%"), hjust = -.30), size = 2.25)
+  gg <- gg + scale_y_continuous(limits = c(0, 1), expand = c(.001,0))
+  gg <- gg + theme(panel.grid.major.y = element_blank())
+  gg <- gg + theme(panel.grid.minor.x = element_blank())
+  gg <- gg + theme(panel.grid.minor.y = element_blank())
+  gg <- gg + theme(panel.border = element_blank())
+  gg <- gg + theme(panel.background = element_blank())
+  gg <- gg + theme(axis.ticks=element_blank())
+  gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+  gg <- gg + theme(axis.title.x = element_blank())
+  gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=18))
+  gg <- gg + theme(axis.text.y  = element_text(size=8))
+  gg <- gg + theme(axis.text.x = element_blank())
+  gg <- gg + theme(plot.title = element_text(size = 16))
+  gg <- gg + theme(legend.position = "none")
+  gg <- gg + coord_flip()
+  gg
+}, res = 90)
+```
+
+```{r categorydiversityfunc}
+selectInput("data2", "", choices = c("Bakedgoods" = 2,
+  "Beans" = 3,
+  "Cheese" = 4,
+  "Coffee" = 5,
+  "Crafts" = 6,
+  "Eggs" = 7,
+  "Flowers" = 8,
+  "Fruits" = 9,
+  "Grains" = 10,
+  "Herbs" = 11,
+  "Honey" = 12,
+  "Jams" = 13,
+  "Juices" = 14,
+  "Maple" = 15,
+  "Meat" = 16,
+  "Mushrooms" = 17,
+  "Nursery" = 18,
+  "Nuts" = 19,
+  "PetFood" = 20,
+  "Plants" = 21,
+  "Poultry" = 22,
+  "Prepared" = 23,
+  "Seafood" = 24,
+  "Soap" = 25,
+  "Tofu" = 26,
+  "Trees" = 27,
+  "Vegetables"= 28,
+  "WildHarvested" = 29,
+  "Wine" = 30))
+
+```
+
+```{r categorydiversitygraph}
+
+renderPlot({
+  b <- c(as.numeric(1),as.numeric(input$data2))
+  a <- allstatespct[,b]
+  colnames(a) <- c("state", "variable")
+gg <- ggplot(a, aes(state,variable))
+gg <- gg + geom_bar(stat = "identity", aes(fill = state), color = "white")
+gg <- gg + labs(x = "State/Territory", title = "Farmers' Market Diversity")
+  gg <- gg + geom_text(aes(label = paste(as.character(as.integer(a$variable*100)), "%"), hjust = -.30), size = 2.25)
+  gg <- gg + theme(panel.grid.major.y = element_blank())
+  gg <- gg + theme(panel.grid.minor.x = element_blank())
+  gg <- gg + theme(panel.grid.minor.y = element_blank())
+  gg <- gg + theme(panel.border = element_blank())
+  gg <- gg + theme(panel.background = element_blank())
+  gg <- gg + theme(axis.ticks=element_blank())
+  gg <- gg + theme(plot.title = element_text(lineheight=.8, face="bold", size = 15, colour = "#66c2a5"))
+  gg <- gg + theme(axis.title.x = element_blank())
+  gg <- gg + theme(axis.title.y = element_text(face="bold", colour="#66c2a5", size=18))
+  gg <- gg + theme(axis.text.y  = element_text(size=8))
+  gg <- gg + theme(axis.text.x = element_blank())
+  gg <- gg + theme(plot.title = element_text(size = 16))
+  gg <- gg + theme(legend.position = "none")
+  gg <- gg + coord_flip()
+  gg
+}, red = 90)
