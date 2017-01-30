@@ -1,0 +1,149 @@
+---
+title: "NH Seacoast Sanctuary City Phonebank"
+output: 
+  html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r libraries_we_need}
+library(readxl)
+library(knitr)
+```
+
+
+
+
+
+## The Do It From Home Guide
+
+This page contains almost all the information you need to do the Seacoast Sanctuary City Phonebank. Please take some time to read through all of it before you start calling. It should only take 5 minutes. Thank you for doing this!
+
+At any point if you have questions, don't hesitate to reach out to me on Facebook or at seacoastsanctuarycity@gmail.com and I'll respond as soon as I can.
+
+
+### Quick Briefing on Sanctuary Cities
+
+
+#### 3 minute video:
+https://www.youtube.com/watch?v=s4-9PaRd6xc
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/s4-9PaRd6xc" frameborder="0" allowfullscreen></iframe>
+
+#### Points from the video:
+<ul>
+<li>Local Law Enforcement of a Sanctuary Town/City is one that is not seeking out immigrants, documented or undocumented, in order to report them and instead is focused on fighting crime.
+
+<li>Local laws of Sanctuary Cities require that police are to ignore ICE’s (Immigration and Customs Enforcement) detention requests unless that person is convicted of a serious crime like murder, rape or assault.
+
+<li>When a city/town declares itself a Sanctuary City, it establishes a degree of trust with the immigrant population which police of Sanctuary Cities have said helps them fight crime as it allows immigrants to feel safe when calling the police.
+</ul>
+-----------------------------------
+-----------------------------------
+-----------------------------------
+
+
+## Phonebank Instructions
+Thank you kind remote friend for participating in this! As Trump’s words transform from rhetoric to executive orders, it’s more important than ever that all of us resist together as a nation. And that starts with local grassroots action.
+
+Here’s what you’ll need to do this action:
+<ul>
+  <li> A phone
+  <li> A computer/tablet/smartphone
+  <li> A pen and paper (or something else to take notes with)
+</ul>
+
+---------------
+---------------
+---------------
+
+### 3 Quick and Easy Tips for Phonebanking:
+<ol>
+  <li><b>Smile while you dial</b> - be sure to smile while you do your calls, the person you’re calling is more likely to receive the message you’re sending to them if you do it with a positive tone.
+  <li><b>Connect with the person you’re calling</b> - elected city officials are people too.
+  <li><b>Be sure to make your ask</b> - clearly state why you are calling and what you are asking of them.
+</ol>
+
+---------------
+---------------
+---------------
+
+### The Call Script:
+
+It's important to note that these scripts are guides and don't need to be followed word for word. I reccomend following it closely for the first couple of calls but it should be as personal as possible!
+
+
+####[If they <b>DO</b> answer the phone]
+
+Hi is <b>((their name))</b> available?
+
+Hi, my name is <b>((your name))</b>, I’m a resident of <b>((town/city you live in or are from))</b> and I’m calling today because I want to urge you to support making <b>((town/city name))</b> a Sanctuary City to protect the immigrant population that is a part of our community here in the Seacoast.
+
+((Insert sentence or two about personal experience with immigration (whether that be with friends you have here that are immigrants or the story of how your family migrated here))). 
+
+All people, citizen or not, should feel safe in their communities and not fear detainment or deportation when they call on local law enforcement for help. 
+
+Will you support making <b>((town/city name))</b> a Sanctuary City?
+
+****PLEASE BE SURE TO TAKE NOTE OF THEIR ANSWER :)
+
+---------------
+---------------
+
+####[If they <b>DO NOT</b> answer the phone]
+
+Hi my name is <b>((your name))</b>, I’m a resident of <b>((town/city you live in or are from))</b> and I’m calling today because I want to urge you to support making <b>((town/city name))</b> a Sanctuary City to protect the immigrant population that is a part of our community here in the Seacoast.
+
+((Insert sentence or two about personal experience with immigration (whether that be with friends you have here that are immigrants or the story of how your family migrated here))).
+
+I believe that all people, citizen or not, should feel safe in their communities and not fear detainment or deportation when they call on local law enforcement for help. 
+
+Will you support making <b>((town/city name))</b> a Sanctuary City?
+
+(Optional) Please give me a call back at <b>((your phone number))</b>, or messsage me at <b>((your email))</b>. 
+
+
+*Hang up phone.
+
+
+**** If they call you back, please be sure to note the stance they’ve taken on the issue and forward that information to me at seacoastsanctuarycity@gmail.com . Though it is optional to leave call back or follow-up info, we are really trying to find allies on these councils and identify adversaries.
+
+---------------
+---------------
+
+
+After you do a call, be sure to take note of:
+<ol>
+  <li>Who you called
+  <li>Whether or not they picked up
+<li>What their response was or if you left a voice message (please leave voice messages!)
+<li>BONUS POINTS: If you call and they don’t pick up, send them a follow-up email.
+</ol>
+
+
+When you feel you are done phonebanking, please forward your notes and results to seacoastsanctuarycity@gmail.com .
+
+###It’s recommended that you start with calling city officials of the town you live in and then move onto the other towns.
+
+---------------
+---------------
+Lastly, if you are interested in being part of a Rapid Response Team please fill out this form:
+https://docs.google.com/forms/d/1Q73_-o7eLzLFbFNYVd3nDArtNUhFO4PEvOuBbH467D0
+
+Thank you again for doing this. #ResistOften
+
+---------------
+---------------
+
+### Mayor/City Councilor Contact List
+```{r contacts}
+
+a <- read_excel("data/listofcontacts.xlsx")
+kable(a)
+```
