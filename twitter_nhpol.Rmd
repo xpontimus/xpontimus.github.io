@@ -1,0 +1,238 @@
+---
+title: "Top Tweets for #NHPolitics"
+author: "@xpontimus"
+output: 
+  html_document:
+    self_contained: no
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+
+```{r pckgs}
+library(rtweet)
+library(tidyverse)
+library(lubridate)
+library(httr)
+library(jsonlite)
+library(htmltools)
+library(stringi)
+library(knitr)
+
+```
+
+```{r collect}
+time_now <- Sys.time()
+yesterday <- date(time_now)-1
+today <- yesterday + 1
+
+twts <- search_tweets("#nhpolitics", n = 5000, since = yesterday, until = today, include_rts = FALSE)
+
+twts$total_interactions <- twts$retweet_count + twts$favorite_count
+```
+
+
+```{r top}
+twts %>%
+  arrange(desc(total_interactions)) -> twts_top_interactions
+
+twts %>%
+  arrange(desc(retweet_count)) -> twts_top_retweets
+
+twts %>%
+  arrange(desc(favorite_count)) -> twts_top_favorites
+```
+# Categories {.tabset .tabset-pills}
+
+## Top Total Interactions
+
+### Total Interactions = # of Retweets + # of Favorites
+
+
+
+
+#### 1
+```{r embed1}
+user <- twts_top_interactions[1,]$screen_name
+status <- twts_top_interactions[1,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+
+
+
+
+#### 2
+```{r embed2}
+user <- twts_top_interactions[2,]$screen_name
+status <- twts_top_interactions[2,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+
+
+
+
+#### 3
+```{r embed3}
+user <- twts_top_interactions[3,]$screen_name
+status <- twts_top_interactions[3,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+## Top Total Retweets
+
+### No. of Times Retweeted
+
+
+
+
+#### 1
+```{r embed1a}
+user <- twts_top_retweets[1,]$screen_name
+status <- twts_top_retweets[1,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+
+
+
+
+#### 2
+```{r embed2a}
+user <- twts_top_retweets[2,]$screen_name
+status <- twts_top_retweets[2,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+
+
+
+
+#### 3
+```{r embed3a}
+user <- twts_top_retweets[3,]$screen_name
+status <- twts_top_retweets[3,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+## Top Total Favorites
+
+### No. of Times Favorited
+
+
+
+
+#### 1
+```{r embed1b}
+user <- twts_top_favorites[1,]$screen_name
+status <- twts_top_favorites[1,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+
+
+
+
+#### 2
+```{r embed2b}
+user <- twts_top_favorites[2,]$screen_name
+status <- twts_top_favorites[2,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
+
+
+
+
+#### 3
+```{r embed3b}
+user <- twts_top_favorites[3,]$screen_name
+status <- twts_top_favorites[3,]$status_id
+
+getURL <- sprintf("https://publish.twitter.com/oembed?url=https%%3A%%2F%%2Ftwitter.com%%2F%s%%2Fstatus%%2F%s", user, status)
+
+res <- GET(getURL)
+
+rawToChar(res$content) %>%
+  fromJSON() %>%
+  .$html %>%
+  gsub('\\p{So}|\\p{Cn}', '', ., perl = TRUE) %>%
+  HTML()
+```
+
